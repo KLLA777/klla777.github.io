@@ -12,6 +12,16 @@
 </head>
 <body>
   <h1>Planificator de Rute</h1>
+  <label for="oras">Alege un oraș:</label>
+<select id="oras" onchange="adaugaOras(this.value)">
+  <option value="">--Selectează un oraș--</option>
+  <option value="București">București</option>
+  <option value="Cluj-Napoca">Cluj-Napoca</option>
+  <option value="Iași">Iași</option>
+  <option value="Timișoara">Timișoara</option>
+  <option value="Craiova">Craiova</option>
+</select>
+
   <div id="map"></div>
   <button onclick="calculateRoute()">Calculează Rută</button>
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
