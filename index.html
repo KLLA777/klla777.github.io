@@ -4,27 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SafeRoute</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f0f4f8;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
       margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: #f0f4f8;
     }
 
     h1 {
+      margin: 20px 0 5px;
       color: #2c3e50;
     }
 
     p {
-      font-size: 1.2em;
       margin-bottom: 20px;
-      text-align: center;
+      font-size: 1.1em;
+      color: #444;
     }
 
     button {
@@ -41,27 +42,36 @@
       background-color: #27ae60;
     }
 
-    #appContent {
-      margin-top: 40px;
-      text-align: center;
+    #map {
+      height: 70vh;
+      width: 90%;
+      margin: 20px auto;
+      display: none;
     }
   </style>
 </head>
 <body>
   <h1>SafeRoute</h1>
   <p>Aplicație web pentru planificarea rutelor pietonale mai sigure.</p>
-  <button onclick="startApp()">Începe</button>
+  <button onclick="startMap()">Începe</button>
 
-  <div id="appContent"></div>
+  <div id="map"></div>
 
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    function startApp() {
-      const appDiv = document.getElementById('appContent');
-      appDiv.innerHTML = `
-        <h2>Bine ai venit!</h2>
-        <p>Aici va apărea funcționalitatea aplicației SafeRoute.</p>
-        <p>Poți adăuga aici o hartă, opțiuni de traseu, filtre etc.</p>
-      `;
+    function startMap() {
+      document.getElementById('map').style.display = 'block';
+
+      const map = L.map('map').setView([44.4268, 26.1025], 13); // București
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      L.marker([44.4268, 26.1025]).addTo(map)
+        .bindPopup('Ești aici.')
+        .openPopup();
     }
   </script>
 </body>
