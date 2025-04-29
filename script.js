@@ -1,4 +1,13 @@
 const apiKey = "5b3ce3597851110001cf6248791e3edff33b4ff1872016f44f155357";
+
+let map = L.map("map").setView([45.9432, 24.9668], 7); // Centru România
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: "© OpenStreetMap contributors"
+}).addTo(map);
+
+let markers = [];
+
 const oraseCoordonate = {
   "București": [44.4268, 26.1025],
   "Cluj-Napoca": [46.7712, 23.6236],
@@ -19,15 +28,8 @@ function adaugaOras(numeOras) {
 
   const marker = L.marker(coord).addTo(map);
   markers.push(marker);
-  map.setView(coord, 12);
+  map.setView(coord, 12); // Zoom pe oraș
 }
-let map = L.map("map").setView([45.9432, 24.9668], 7); // România
-
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap contributors"
-}).addTo(map);
-
-let markers = [];
 
 map.on("click", function (e) {
   if (markers.length >= 2) {
