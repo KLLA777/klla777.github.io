@@ -1,46 +1,82 @@
 <!DOCTYPE html>
 <html lang="ro">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SafeRoute</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f4f8;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-    h1 {
-      color: #2c3e50;
-    }
-    p {
-      max-width: 400px;
-      text-align: center;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #2ecc71;
-      border: none;
-      color: white;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #27ae60;
-    }
-  </style>
-</head>
-<body>
-  <h1>SafeRoute</h1>
-  <p>Aplicație web pentru planificarea rutelor pietonale mai sigure.</p>
-  <button onclick="alert('Funcționalitate în curs de dezvoltare!')">Începe</button>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SafeRoute</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background-color: #007bff;
+        color: white;
+        padding: 1rem;
+        text-align: center;
+      }
+      #map {
+        height: 60vh;
+        width: 100%;
+      }
+      footer {
+        background-color: #343a40;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>SafeRoute</h1>
+      <p>Planifică trasee pietonale mai sigure</p>
+    </header>
+
+    <div class="container my-4">
+      <div id="map"></div>
+      <button class="btn btn-primary mt-3" onclick="locateUser()">
+        Găsește locația mea
+      </button>
+    </div>
+
+    <footer>
+      &copy; 2025 SafeRoute. Toate drepturile rezervate.
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      const map = L.map('map').setView([45.9432, 24.9668], 6); // România
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap contributors',
+      }).addTo(map);
+
+      function locateUser() {
+        map.locate({ setView: true, maxZoom: 16 });
+      }
+
+      map.on('locationfound', (e) => {
+        L.marker(e.latlng).addTo(map).bindPopup('Ești aici!').openPopup();
+      });
+
+      map.on('locationerror', () => {
+        alert('Nu s-a putut determina locația.');
+      });
+    </script>
+  </body>
 </html>
