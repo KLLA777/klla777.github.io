@@ -1,5 +1,26 @@
 const apiKey = "5b3ce3597851110001cf6248791e3edff33b4ff1872016f44f155357";
+const oraseCoordonate = {
+  "București": [44.4268, 26.1025],
+  "Cluj-Napoca": [46.7712, 23.6236],
+  "Iași": [47.1585, 27.6014],
+  "Timișoara": [45.7489, 21.2087],
+  "Craiova": [44.3302, 23.7949]
+};
 
+function adaugaOras(numeOras) {
+  if (!numeOras || !oraseCoordonate[numeOras]) return;
+
+  const coord = oraseCoordonate[numeOras];
+
+  if (markers.length >= 2) {
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+  }
+
+  const marker = L.marker(coord).addTo(map);
+  markers.push(marker);
+  map.setView(coord, 12);
+}
 let map = L.map("map").setView([45.9432, 24.9668], 7); // România
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
