@@ -1,78 +1,20 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SafeRoute</title>
-
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      background-color: #f0f4f8;
-    }
-
-    h1 {
-      margin: 20px 0 5px;
-      color: #2c3e50;
-    }
-
-    p {
-      margin-bottom: 20px;
-      font-size: 1.1em;
-      color: #444;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 1em;
-      background-color: #2ecc71;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #27ae60;
-    }
-
-    #map {
-      height: 70vh;
-      width: 90%;
-      margin: 20px auto;
-      display: none;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Planificator de Rute</title>
+  <link rel="stylesheet" href="style.css" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+  />
 </head>
 <body>
-  <h1>SafeRoute</h1>
-  <p>Aplicație web pentru planificarea rutelor pietonale mai sigure.</p>
-  <button onclick="startMap()">Începe</button>
-
+  <h1>Planificator de Rute</h1>
   <div id="map"></div>
-
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    function startMap() {
-      document.getElementById('map').style.display = 'block';
-
-      const map = L.map('map').setView([44.4268, 26.1025], 13); // București
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
-
-      L.marker([44.4268, 26.1025]).addTo(map)
-        .bindPopup('Ești aici.')
-        .openPopup();
-    }
-  </script>
+  <button onclick="calculateRoute()">Calculează Rută</button>
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
