@@ -20,6 +20,26 @@ for (const oras in orase) {
   sosireSelect.add(opt2.cloneNode(true));
 }
 
+plecareSelect.addEventListener("change", function () {
+  const oras = plecareSelect.value;
+  if (orase[oras]) {
+    const [lat, lon] = orase[oras];
+    map.flyTo([lat, lon], 10, {
+      duration: 1.5
+    });
+  }
+});
+
+sosireSelect.addEventListener("change", function () {
+  const oras = sosireSelect.value;
+  if (orase[oras]) {
+    const [lat, lon] = orase[oras];
+    map.flyTo([lat, lon], 10, {
+      duration: 1.5
+    });
+  }
+});
+
 const map = L.map("map").setView([45.9432, 24.9668], 7);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
