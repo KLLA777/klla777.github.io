@@ -1,63 +1,104 @@
-const apiKey = "5b3ce3597851110001cf6248791e3edff33b4ff1872016f44f155357";
+const orase = {
+  "București": [44.4268, 26.1025],
+  "Cluj-Napoca": [46.7712, 23.6236],
+  "Timișoara": [45.7489, 21.2087],
+  "Iași": [47.1585, 27.6014],
+  "Constanța": [44.1598, 28.6348],
+  "Craiova": [44.3302, 23.7949],
+  "Brașov": [45.6579, 25.6012],
+  "Galați": [45.4353, 28.0076],
+  "Oradea": [47.0722, 21.9211],
+  "Sibiu": [45.7930, 24.1213]
+};
 
-let map = L.map("map").setView([45.9432, 24.9668], 7); // România
+const plecare = document.getElementById('plecare');
+const sosire = document.getElementById('sosire');
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap contributors"
+// Populare dropdown-uri
+for (const oras in orase) {
+  const opt1 = document.createElement('option');
+  opt1.value = oras;
+  opt1.text = oras;
+  plecare.appendChild(opt1);
+
+  const opt2 = document.createElement('option');
+  opt2.value = oras;
+  opt2.text = oras;
+  sosire.appendChild(opt2);
+}
+
+// Inițializare hartă
+const map = L.map('map').setView([45.9432, 24.9668], 7);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-let markers = [];
+// Redimensionare corectă
+setTimeout(() => {
+  map.invalidateSize();
+}, 200);
 
-map.on("click", function (e) {
-  if (markers.length >= 2) {
-    markers.forEach(m => map.removeLayer(m));
-    markers = [];
-    if (window.routeLine) map.removeLayer(window.routeLine);
-    document.getElementById("info").innerHTML = "";
-  }
-  let marker = L.marker(e.latlng).addTo(map);
-  markers.push(marker);
-});
+let rutaLayer;
 
-async function calculateRoute() {
-  if (markers.length < 2) {
-    alert("Selectează două puncte pe hartă!");
+// Funcția principală
+async function calculeazaRuta() {
+  const orasPlecare = plecare.value;
+  const orasSosire = sosire.value;
+
+  if (!orasPlecare || !orasSosire || orasPlecare === orasSosire) {
+    alert('Selectează două orașe diferite!');
     return;
   }
 
-  const coords = markers.map(m => [m.getLatLng().lng, m.getLatLng().lat]);
+  const coordStart = orase[orasPlecare];
+  const coordEnd = orase[orasSosire];
 
+  const apiKey = "5b3ce3597851110001cf6248791e3edff33b4ff1872016f44f155357"; // cheia ta
   const url = "https://api.openrouteservice.org/v2/directions/driving-car/geojson";
+
+  const body = {
+    coordinates: [coordStart.reverse(), coordEnd.reverse()]
+  };
+
+  const headers = {
+    "Authorization": apiKey,
+    "Content-Type": "application/json"
+  };
 
   try {
     const response = await fetch(url, {
       method: "POST",
-      headers: {
-        "Authorization": apiKey,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ coordinates: coords })
+      headers: headers,
+      body: JSON.stringify(body)
     });
 
     const data = await response.json();
 
-    if (window.routeLine) map.removeLayer(window.routeLine);
-    window.routeLine = L.geoJSON(data).addTo(map);
+    const distance = data.features[0].properties.summary.distance / 1000; // km
+    const duration = data.features[0].properties.summary.duration / 60; // minute
 
-    const distanceMeters = data.features[0].properties.summary.distance;
-    const durationSeconds = data.features[0].properties.summary.duration;
-    const mode = data.features[0].properties.profile;
+    const transport = data.features[0].properties.segments[0].steps.length > 0 ? "Mașină" : "N/A";
 
-    const distanceKm = (distanceMeters / 1000).toFixed(2);
-    const durationMin = Math.round(durationSeconds / 60);
+    document.getElementById("rezultat").innerHTML =
+      `<b>Distanță:</b> ${distance.toFixed(2)} km<br>` +
+      `<b>Durată estimată:</b> ${duration.toFixed(1)} minute<br>` +
+      `<b>Transport:</b> ${transport}`;
 
-    document.getElementById("info").innerHTML =
-      `<strong>Tip transport:</strong> ${mode}<br>
-       <strong>Distanță:</strong> ${distanceKm} km<br>
-       <strong>Durată:</strong> ${durationMin} minute`;
+    // Șterge ruta veche
+    if (rutaLayer) map.removeLayer(rutaLayer);
 
-  } catch (err) {
-    alert("Eroare la calcularea rutei.");
-    console.error(err);
+    rutaLayer = L.geoJSON(data, {
+      style: {
+        color: 'blue',
+        weight: 4
+      }
+    }).addTo(map);
+
+    map.fitBounds(rutaLayer.getBounds());
+
+  } catch (error) {
+    alert("A apărut o eroare la calcularea rutei.");
+    console.error(error);
   }
 }
