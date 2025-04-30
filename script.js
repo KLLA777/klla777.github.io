@@ -50,6 +50,7 @@ let rutaLayer = null;
 function calculeazaRuta() {
   const plecare = plecareSelect.value;
   const sosire = sosireSelect.value;
+  const tipTransport = document.getElementById("transport").value;
 
   if (!plecare || !sosire || plecare === sosire) {
     alert("Selectează două orașe diferite.");
@@ -59,7 +60,7 @@ function calculeazaRuta() {
   const coordPlecare = orase[plecare];
   const coordSosire = orase[sosire];
 
-  fetch("https://api.openrouteservice.org/v2/directions/driving-car/geojson", {
+  fetch(`https://api.openrouteservice.org/v2/directions/${tipTransport}/geojson`, {
     method: "POST",
     headers: {
       "Authorization": apiKey,
@@ -78,7 +79,13 @@ function calculeazaRuta() {
 
       const dist = (data.features[0].properties.summary.distance / 1000).toFixed(2);
       const dur = (data.features[0].properties.summary.duration / 60).toFixed(1);
-      const tip = "Mașină";
+
+      const tipMap = {
+        "driving-car": "🚗 Mașină",
+        "cycling-regular": "🚴 Bicicletă",
+        "foot-walking": "🚶 Pe jos"
+      };
+      const tip = tipMap[tipTransport] || "Transport necunoscut";
 
       document.getElementById("rezultat").innerHTML =
         `<p><strong>Distanță:</strong> ${dist} km<br>
