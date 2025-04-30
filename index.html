@@ -2,31 +2,40 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rută între orașe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rută între orașe din România</title>
   <link rel="stylesheet" href="style.css" />
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    integrity="sha256-sA+4J6G3/jTnG0usRfJf8/U9GsxE9wA9Ck9oZzT30aw="
     crossorigin=""
   />
 </head>
 <body>
   <h1>Rută între două orașe din România</h1>
-  <div class="controls">
-    <select id="startSelect">
-      <option value="">Alege orașul de plecare</option>
-    </select>
-    <select id="endSelect">
-      <option value="">Alege orașul de sosire</option>
-    </select>
-    <button onclick="calculateRoute()">Calculează ruta</button>
-  </div>
-  <div id="map"></div>
-<div id="info" style="margin-top: 1em; font-weight: bold;"></div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <div class="controls">
+    <select id="plecare">
+      <option disabled selected>Alege orașul de plecare</option>
+    </select>
+
+    <select id="sosire">
+      <option disabled selected>Alege orașul de sosire</option>
+    </select>
+
+    <button onclick="calculeazaRuta()">Calculează ruta</button>
+  </div>
+
+  <div id="map"></div>
+
+  <div id="rezultat"></div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1j7kGRtOT0V4e0LrL2HqxFVEbFzT1Ek50pWxlhkM="
+    crossorigin=""
+  ></script>
   <script src="script.js"></script>
 </body>
 </html>
