@@ -1,7 +1,5 @@
-// Cheia API OpenRouteService (păstrează-o privată în producție!)
 const apiKey = "5b3ce3597851110001cf6248791e3edff33b4ff1872016f44f155357";
 
-// Listă simplă de orașe din România cu coordonate (poți adăuga mai multe)
 const orase = {
   "București": [44.4268, 26.1025],
   "Cluj-Napoca": [46.7712, 23.6236],
@@ -12,7 +10,6 @@ const orase = {
   "Sibiu": [45.7983, 24.1256]
 };
 
-// Populează dropdown-urile
 const plecareSelect = document.getElementById("plecare");
 const sosireSelect = document.getElementById("sosire");
 
@@ -23,7 +20,6 @@ for (const oras in orase) {
   sosireSelect.add(opt2.cloneNode(true));
 }
 
-// Inițializează harta
 const map = L.map("map").setView([45.9432, 24.9668], 7);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
@@ -55,7 +51,6 @@ function calculeazaRuta() {
   })
     .then((r) => r.json())
     .then((data) => {
-      // Elimină ruta veche
       if (rutaLayer) map.removeLayer(rutaLayer);
 
       rutaLayer = L.geoJSON(data).addTo(map);
@@ -63,7 +58,7 @@ function calculeazaRuta() {
 
       const dist = (data.features[0].properties.summary.distance / 1000).toFixed(2);
       const dur = (data.features[0].properties.summary.duration / 60).toFixed(1);
-      const tip = data.features[0].properties.segments[0].steps.length ? "driving-car" : "necunoscut";
+      const tip = "Mașină";
 
       document.getElementById("rezultat").innerHTML =
         `<p><strong>Distanță:</strong> ${dist} km<br>
